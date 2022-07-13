@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import Result from './Result';
+import UserForm from './UserForm';
+import Card from './UI/Card';
 
 function App() {
+  const [coinData, setCoinData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState();
+  // API
+  useEffect(() => {
+    fetch('https://api.coinpaprika.com/v1/tickers')
+      .then((response) => response.json())
+      .then((json) => {
+        setCoinData(json);
+        setLoading(false);
+      });
+  }, []);
+
+  const formHandler = (uUsd, uCoin) => {
+    setUserData({ usd: +uUsd, coin: +uCoin });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Card>
+      <h1> 💵 The Coins!</h1>
+      {loading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <div>
+          <UserForm data={coinData} formHandler={formHandler} />
+          <Result entered={userData} />
+        </div>
+      )}
+    </Card>
   );
 }
 
