@@ -1,8 +1,8 @@
-const CoinSelect = ({ coins, coinChange }) => {
+const CoinSelect = ({ coins, coinRef }) => {
   return (
     <div>
       <label>Coin: </label>
-      <select onChange={coinChange}>
+      <select ref={coinRef}>
         {coins.map((coin) => (
           <option key={coin.id} value={coin.quotes.USD.price}>
             ({coin.symbol}): {coin.name} ${coin.quotes.USD.price} USD
